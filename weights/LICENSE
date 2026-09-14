@@ -1,0 +1,15 @@
+Weights licensing
+=================
+
+weights/tooth_detector_yolov8m_obb.pt
+    Fine-tuned from Ultralytics YOLOv8m-OBB. Ultralytics releases YOLOv8 under
+    AGPL-3.0 (https://github.com/ultralytics/ultralytics/blob/main/LICENSE),
+    and this derivative checkpoint is distributed under the same terms.
+    If you need to use it in a closed-source product, obtain a commercial
+    licence from Ultralytics or retrain from a permissively licensed detector.
+
+HMA-Net model checkpoints (distributed as GitHub release assets)
+    Copyright (c) 2026 The HMA-Net authors. Released under the same MIT terms as
+    the code, with the following restriction: research use only. The checkpoints
+    must not be used for clinical diagnosis, treatment decisions, age assessment
+    of minors, or any forensic or immigration procedure.

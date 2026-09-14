@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: "If you use this code or the trained weights, please cite the manuscript below."
+title: "HMA-Net: code, parameters and weights for incremental information auditing of anatomical inputs in dental age and sex estimation"
+type: software
+authors:
+  - family-names: Wu
+    given-names: Zongze
+  - family-names: Zhang
+    given-names: Wujun
+  - family-names: Kang
+    given-names: Zhenpei
+  - family-names: Yang
+    given-names: Benyu
+  - family-names: Liao
+    given-names: Zibin
+  - family-names: Huang
+    given-names: Zehang
+  - family-names: Shan
+    given-names: Weijie
+  - family-names: Xia
+    given-names: Yue
+version: "1.0"
+date-released: "2026-09-15"
+license: MIT
+repository-code: "https://github.com/yingziyejiang/HMA-Net"
+preferred-citation:
+  type: article
+  title: "Incremental information auditing reveals non-incremental anatomical inputs in dental age and sex estimation"
+  authors:
+    - family-names: Wu
+      given-names: Zongze
+    - family-names: Zhang
+      given-names: Wujun
+    - family-names: Kang
+      given-names: Zhenpei
+    - family-names: Yang
+      given-names: Benyu
+    - family-names: Liao
+      given-names: Zibin
+    - family-names: Huang
+      given-names: Zehang
+    - family-names: Shan
+      given-names: Weijie
+    - family-names: Xia
+      given-names: Yue
+  year: 2026
+  journal: TBD
+  doi: TBD

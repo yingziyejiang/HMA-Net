@@ -1,0 +1,4 @@
+img_path,label_path,age,gender,split
+images/000006934.jpg,labels_obb5/000006934.txt,5.8,0,test
+images/000007964px.jpg,labels_obb5/000007964px.txt,13.3,0,test
+images/000009254px1.jpg,labels_obb5/000009254px1.txt,7.6,0,test
