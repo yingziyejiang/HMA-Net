@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+
+# the clinical dataset is never published here
+data/
+images/
+*.pt
+*.pth
+*.ckpt
+*.dcm
+*.nii*
+*.docx
+*.pdf
+runs/
+logs/
+.aim/
+
+# exceptions: the deliberately published aggregate metrics and the three sample cases
+!metrics/**
+!data_sample/**
+
+# exceptions: trained detector weights and the two published figure sources
+!weights/**

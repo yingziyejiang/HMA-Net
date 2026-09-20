@@ -1,0 +1,82 @@
+{
+  "model": "HMA-Net (HMAAgePredictor)",
+  "streams": {
+    "L1_panoramic": {
+      "backbone": "ResNet50 (ImageNet-pretrained)",
+      "input": "256x256 grayscale OPG",
+      "output_dim": 256
+    },
+    "L2_jaw_crop": {
+      "backbone": "ResNet34",
+      "status": "disabled"
+    },
+    "L3_per_tooth": {
+      "backbone": "ResNet34",
+      "input": "32 x 64x64 grayscale ROIs",
+      "embedding": "512 (CNN) + 32 (bbox) + 16 (FDI) -> 256",
+      "aggregator": "GAT, 4 heads, 2 layers, k = 4 spatial nearest neighbours"
+    }
+  },
+  "fusion": {
+    "type": "FiLM",
+    "task_decoupled": true,
+    "sex_branch": "128-d unmodulated sex feature"
+  },
+  "heads": {
+    "age": "linear + MSE, with an auxiliary CORAL ranking term",
+    "sex": "sigmoid + Focal BCE (gamma = 2)"
+  },
+  "loss": {
+    "total": "L_MSE(age) + 0.5 * L_CORAL + 3.0 * L_FocalBCE(sex)"
+  },
+  "training": {
+    "optimizer": "Adam",
+    "phase1": {
+      "epochs": 15,
+      "lr": 0.001,
+      "backbones": "frozen"
+    },
+    "phase2": {
+      "lr": 0.0001,
+      "all_parameters": "trainable"
+    },
+    "lr_schedule": "halved every 20 epochs",
+    "epochs": 100,
+    "batch_size": 32,
+    "sampler": "gender-balanced",
+    "checkpoint": "best validation score per head",
+    "entry_point": "train.py"
+  },
+  "augmentation": {
+    "jitter": 0.1,
+    "rotation_deg": 5,
+    "feature_dropout": 0.1,
+    "tooth_dropout": 0.2,
+    "colour_jitter": true,
+    "tooth_context_margin": 0.6,
+    "protocol": "fixed-mid (parameters held constant, no curriculum ramp)"
+  },
+  "detector": {
+    "model": "YOLOv8m-OBB",
+    "ultralytics": "8.4.10",
+    "classes": "52 (32 permanent, 20 deciduous)",
+    "inference": {
+      "conf": 0.25,
+      "iou": 0.7,
+      "max_det": 300,
+      "imgsz": 1024
+    },
+    "weights": "weights/tooth_detector_yolov8m_obb.pt"
+  },
+  "environment": {
+    "python": "3.10",
+    "torch": "2.1.2+cu121",
+    "cuda": "12.1",
+    "cudnn": "8.9",
+    "gpu": "NVIDIA RTX 4080 SUPER (32 GB)"
+  },
+  "data": {
+    "split": "subject level: 2,999 train / 637 validation / 657 test",
+    "metrics": "MAE (years) for age, accuracy for sex"
+  }
+}
