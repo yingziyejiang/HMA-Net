@@ -24,7 +24,7 @@ anatomical inputs in dental age and sex estimation*.
 
     model = HMAAgePredictor().eval()
 
-The model expects one batch dict: img (B,3,256,256), teeth (B,32,3,64,64), pos_bbox (B,32,4),
+The model expects one batch dict: img (B,3,512,512), teeth (B,32,3,64,64), pos_bbox (B,32,4),
 fdi (B,32), mask (B,32). It returns (age_pred, gender_logit, coral_logits); the sex probability
 is sigmoid(gender_logit).
 
