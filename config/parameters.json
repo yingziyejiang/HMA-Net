@@ -3,7 +3,7 @@
   "streams": {
     "L1_panoramic": {
       "backbone": "ResNet50 (ImageNet-pretrained)",
-      "input": "256x256 grayscale OPG",
+      "input": "512x512 grayscale OPG",
       "output_dim": 256
     },
     "L2_jaw_crop": {

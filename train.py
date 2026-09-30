@@ -19,6 +19,7 @@ def parse_args():
     p.add_argument('--epochs', type=int, default=100)
     p.add_argument('--phase1-epochs', type=int, default=15)
     p.add_argument('--batch-size', type=int, default=32)
+    p.add_argument('--img-size', type=int, default=512, help='panoramic input resolution (paper: 512)')
     p.add_argument('--lr1', type=float, default=1e-3)
     p.add_argument('--lr2', type=float, default=1e-4)
     p.add_argument('--lr-halve-every', type=int, default=20)
@@ -31,12 +32,12 @@ def parse_args():
     return p.parse_args()
 
 
-def loaders(manifest, batch_size, num_workers):
+def loaders(manifest, batch_size, num_workers, img_size=512):
     import pandas as pd
     df = pd.read_csv(manifest)
-    tr = DentalAgeDataset(df[df.split == 'train'], training=True)
-    va = DentalAgeDataset(df[df.split == 'val'], training=False)
-    te = DentalAgeDataset(df[df.split == 'test'], training=False)
+    tr = DentalAgeDataset(df[df.split == 'train'], img_size=img_size, training=True)
+    va = DentalAgeDataset(df[df.split == 'val'], img_size=img_size, training=False)
+    te = DentalAgeDataset(df[df.split == 'test'], img_size=img_size, training=False)
     return (DataLoader(tr, batch_sampler=BalancedBatchSampler(tr, batch_size), num_workers=num_workers),
             DataLoader(va, batch_size=batch_size, shuffle=False, num_workers=num_workers),
             DataLoader(te, batch_size=batch_size, shuffle=False, num_workers=num_workers))
@@ -45,8 +46,8 @@ def loaders(manifest, batch_size, num_workers):
 def main():
     a = parse_args()
     os.makedirs(a.outdir, exist_ok=True)
-    train_ld, val_ld, test_ld = loaders(a.manifest, a.batch_size, a.num_workers)
-    model = HMAAgePredictor().to(a.device)
+    train_ld, val_ld, test_ld = loaders(a.manifest, a.batch_size, a.num_workers, a.img_size)
+    model = HMAAgePredictor(img_size=a.img_size).to(a.device)
     opt = torch.optim.Adam(model.parameters(), lr=a.lr1)
     sched = torch.optim.lr_scheduler.StepLR(opt, step_size=a.lr_halve_every, gamma=0.5)
     best = {'age': float('inf'), 'sex': -1.0}

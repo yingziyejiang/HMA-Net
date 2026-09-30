@@ -15,7 +15,7 @@ def _build_backbone(name):
     return nn.Sequential(*list(bb.children())[:-1]), LIGHT_FEAT_DIMS[name]
 
 class DentalAgeDataset(Dataset):
-    def __init__(self, df, img_size=256, tooth_size=64, max_teeth=52, training=False,
+    def __init__(self, df, img_size=512, tooth_size=64, max_teeth=52, training=False,
                  jitter_scale=0.12, jitter_shift=0.15, jitter_angle=12.0, tooth_dropout=0.2, color_jitter=True,
                  context_margin=0.6):
         self.df = df.reset_index(drop=True)
@@ -185,7 +185,7 @@ class DentalAgeDataset(Dataset):
         }
 
 class GlobalEncoder(nn.Module):
-    def __init__(self, embed_dim=256, backbone_type='resnet50', img_size=256):
+    def __init__(self, embed_dim=256, backbone_type='resnet50', img_size=512):
         super().__init__()
         self.features, self.feat_dim = _build_backbone(backbone_type)
         self.pool = nn.AdaptiveAvgPool2d(1)
@@ -272,7 +272,7 @@ class SpatialGAT(nn.Module):
 
 class HMAAgePredictor(nn.Module):
     def __init__(self, embed_dim=256, num_age_bins=16, use_coral=True,
-                 l1_backbone='resnet50', l3_backbone='resnet34', img_size=256):
+                 l1_backbone='resnet50', l3_backbone='resnet34', img_size=512):
         super().__init__()
         self.use_coral = use_coral
         self.embed_dim = embed_dim
