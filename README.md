@@ -11,6 +11,7 @@ de-identified sample. Other analysis scripts used in the study are not part of t
 ## Contents
 
     train.py                  training entry point (two-phase fine-tuning)
+    evaluate.py               evaluate a checkpoint on one split
     hma_net/hma_net.py        model, losses, dataset and evaluation (self-contained)
     config/parameters.json    parameters of the reported configuration
     data_sample/              three de-identified sample cases and the label format
@@ -49,6 +50,11 @@ python evaluate.py --manifest manifest.csv --checkpoint runs/hma_net/best_age.pt
 ## Train
 
     python train.py --manifest manifest.csv --outdir runs/hma_net
+
+The bundled sample is a three-case test split; run it from the repository root with
+
+    HMA_DATA_ROOT=data_sample python evaluate.py --manifest data_sample/sample_index.csv \
+        --checkpoint runs/hma_net/best_age.pt --split test
 
 The manifest CSV needs the columns img_path, label_path, age, gender, split, with per-tooth label
 files in the format described in data_sample/README.md. Protocol of the reported run: Adam, 15

@@ -1,5 +1,6 @@
 """Minimal training entry point for HMA-Net (two-phase, early stopping)."""
 import argparse
+import json
 import os
 import sys
 
@@ -77,8 +78,8 @@ def main():
             running += float(loss)
         sched.step()
         m = evaluate(model, val_ld, a.device)
-        mae = float(m['age_mae'] if isinstance(m, dict) else m[0])
-        acc = float(m['sex_acc'] if isinstance(m, dict) else m[1])
+        mae = float(m['mae'])
+        acc = float(m['gender_acc'])   # keys returned by hma_net.evaluate()
         print('epoch %3d | train %.4f | val MAE %.4f | val GAcc %.4f | lr %.2e'
               % (ep + 1, running / max(1, step + 1), mae, acc, opt.param_groups[0]['lr']), flush=True)
         if mae < best['age']:

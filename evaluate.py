@@ -12,7 +12,7 @@ from hma_net import DentalAgeDataset, HMAAgePredictor, evaluate
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--manifest', required=True)
-    p.add_argument('--checkpoint', required=True, help='best_age.pt or best_gender.pt')
+    p.add_argument('--checkpoint', required=True, help='checkpoint written by train.py (best_age.pt or best_sex.pt)')
     p.add_argument('--split', default='test', choices=['train', 'val', 'test'])
     p.add_argument('--img-size', type=int, default=512)
     p.add_argument('--batch-size', type=int, default=12)
@@ -31,10 +31,8 @@ def main():
     model.eval()
 
     m = evaluate(model, ld, a.device)
-    if isinstance(m, dict):
-        print('split %s | n %d | age MAE %.4f | sex accuracy %.4f' % (a.split, len(ds), m['age_mae'], m['sex_acc']))
-    else:
-        print('split %s | n %d | age MAE %.4f | sex accuracy %.4f' % (a.split, len(ds), m[0], m[1]))
+    print('split %s | n %d | age MAE %.4f | sex accuracy %.4f'
+          % (a.split, len(ds), m['mae'], m['gender_acc']))
 
 
 if __name__ == '__main__':

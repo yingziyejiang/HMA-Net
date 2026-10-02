@@ -3,7 +3,7 @@
   "streams": {
     "L1_panoramic": {
       "backbone": "ResNet50 (ImageNet-pretrained)",
-      "input": "512x512 grayscale OPG",
+      "input": "512x512 RGB OPG (ImageNet-normalised)",
       "output_dim": 256
     },
     "L2_jaw_crop": {
@@ -12,7 +12,7 @@
     },
     "L3_per_tooth": {
       "backbone": "ResNet34",
-      "input": "32 x 64x64 grayscale ROIs",
+      "input": "32 x 64x64 RGB ROIs (ImageNet-normalised)",
       "embedding": "512 (CNN) + 32 (bbox) + 16 (FDI) -> 256",
       "aggregator": "GAT, 4 heads, 2 layers, k = 4 spatial nearest neighbours"
     }
@@ -34,7 +34,7 @@
     "phase1": {
       "epochs": 15,
       "lr": 0.001,
-      "backbones": "frozen"
+      "backbones": "L1 backbone frozen (the L3 tooth encoder stays trainable)"
     },
     "phase2": {
       "lr": 0.0001,
@@ -42,7 +42,7 @@
     },
     "lr_schedule": "halved every 20 epochs",
     "epochs": 100,
-    "batch_size": 32,
+    "batch_size": 12,
     "sampler": "gender-balanced",
     "checkpoint": "best validation score per head",
     "entry_point": "train.py"
