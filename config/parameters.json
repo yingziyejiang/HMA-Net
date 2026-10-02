@@ -6,10 +6,6 @@
       "input": "512x512 RGB OPG (ImageNet-normalised)",
       "output_dim": 256
     },
-    "L2_jaw_crop": {
-      "backbone": "ResNet34",
-      "status": "disabled"
-    },
     "L3_per_tooth": {
       "backbone": "ResNet34",
       "input": "32 x 64x64 RGB ROIs (ImageNet-normalised)",

@@ -37,7 +37,7 @@ age head is conditioned on that predicted sex, so no sex label is needed at infe
 
 ## Reported configuration
 
-512 x 512 panoramic input; L1 panoramic + L3 per-tooth streams (L2 disabled); FiLM fusion (task-decoupled);
+512 x 512 panoramic input; L1 panoramic + L3 per-tooth streams; FiLM fusion (task-decoupled);
 GAT aggregation over the tooth graph (4 heads, 2 layers, k = 4 spatial nearest neighbours); fixed-mid
 augmentation (jitter 0.10, shift 0.10, rotation 5 degrees, feature dropout 0.1, tooth dropout 0.1, no
 curriculum ramp); Adam, 15 frozen-backbone epochs at lr 1e-3 then full fine-tuning at lr 1e-4 halved every
@@ -46,9 +46,6 @@ curriculum ramp); Adam, 15 frozen-backbone epochs at lr 1e-3 then full fine-tuni
 ## Evaluate
 
 python evaluate.py --manifest manifest.csv --checkpoint runs/hma_net/best_age.pt --split test
-
-A checkpoint may also carry the projection layer of the L2 branch; L2 is disabled in the reported
-configuration, so those tensors are ignored when the model is loaded.
 
 ## Train
 

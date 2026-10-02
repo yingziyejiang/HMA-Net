@@ -27,12 +27,7 @@ def main():
     model = HMAAgePredictor(img_size=a.img_size).to(a.device)
     ckpt = torch.load(a.checkpoint, map_location=a.device)
     state = ckpt.get('model_state_dict', ckpt)
-    # Checkpoints from the reported runs also carry the projector of the L2 branch, which is
-    # disabled in this release; it is unused at inference, so those tensors are ignored.
-    missing, unexpected = model.load_state_dict(state, strict=False)
-    if unexpected or missing:
-        print('note: ignored %d tensor(s) not used by this release: %s'
-              % (len(unexpected), sorted(unexpected)))
+    model.load_state_dict(state)   # the checkpoint must match the released configuration
     model.eval()
 
     m = evaluate(model, ld, a.device)
