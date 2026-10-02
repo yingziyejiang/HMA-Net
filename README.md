@@ -47,6 +47,9 @@ curriculum ramp); Adam, 15 frozen-backbone epochs at lr 1e-3 then full fine-tuni
 
 python evaluate.py --manifest manifest.csv --checkpoint runs/hma_net/best_age.pt --split test
 
+A checkpoint may also carry the projection layer of the L2 branch; L2 is disabled in the reported
+configuration, so those tensors are ignored when the model is loaded.
+
 ## Train
 
     python train.py --manifest manifest.csv --outdir runs/hma_net
