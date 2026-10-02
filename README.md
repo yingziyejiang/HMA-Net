@@ -29,9 +29,9 @@ de-identified sample. Other analysis scripts used in the study are not part of t
     model = HMAAgePredictor().eval()
 
 The model takes one batch dict with keys img (B,3,512,512), teeth (B,32,3,64,64), pos_bbox (B,32,4),
-fdi (B,32), mask (B,32) and gender (B,1). It returns (age_pred, gender_logit, coral_logits); the sex
-probability is sigmoid(gender_logit). Note that the age head receives an embedding of the sex label in
-`gender`, exactly as in the reported runs, so that key must be supplied in every call.
+fdi (B,32) and mask (B,32). It returns (age_pred, gender_logit, coral_logits); the sex probability is
+sigmoid(gender_logit). Both outputs come from the panoramic image alone: sex is read out first and the
+age head is conditioned on that predicted sex, so no sex label is needed at inference.
 
 ## Reported configuration
 

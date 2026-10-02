@@ -379,15 +379,19 @@ class HMAAgePredictor(nn.Module):
         gender_gated = gender_concat * film_out[:, :half] + film_out[:, half:]
         gender_feat = self.gender_fusion_mlp(gender_gated)
 
-        gen_emb = self.gender_embed(gender.long())
-        age_input = torch.cat([age_feat, gen_emb], dim=-1)
-        age_pred = self.age_head(age_input)
-
         if self.use_gender_l1:
             gender_input = torch.cat([gender_feat, l1_gender], dim=-1)
         else:
             gender_input = gender_feat
         gender_logit = self.gender_head(gender_input)
+
+        # Joint estimation: the sex probability is read from the image features first, and the age
+        # head is conditioned on that prediction rather than on the true sex label, so both outputs
+        # come from the panoramic image alone. The "gender" key of the batch is not used at inference.
+        pred_sex = (torch.sigmoid(gender_logit) > 0.5).long()
+        gen_emb = self.gender_embed(pred_sex)
+        age_input = torch.cat([age_feat, gen_emb], dim=-1)
+        age_pred = self.age_head(age_input)
 
         coral_logits = self.coral_head(age_feat) if self.use_coral else None
 
