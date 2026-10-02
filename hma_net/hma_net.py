@@ -387,7 +387,7 @@ class HMAAgePredictor(nn.Module):
         # Joint estimation: the sex probability is read from the image features first, and the age
         # head is conditioned on that prediction rather than on the true sex label, so both outputs
         # come from the panoramic image alone. The "gender" key of the batch is not used at inference.
-        pred_sex = (torch.sigmoid(gender_logit) > 0.5).long()
+        pred_sex = (torch.sigmoid(gender_logit).view(-1) > 0.5).long()
         gen_emb = self.gender_embed(pred_sex)
         age_input = torch.cat([age_feat, gen_emb], dim=-1)
         age_pred = self.age_head(age_input)
