@@ -53,8 +53,16 @@ def main():
     best = {'age': float('inf'), 'sex': -1.0}
     best_epoch = {'age': 0, 'sex': 0}
     for ep in range(a.epochs):
-        if ep == a.phase1_epochs:
-            set_trainable(model, ['l1_encoder', 'l3_encoder'], True)
+        if ep < a.phase1_epochs:
+            # Phase 1 freezes the L1 backbone only. As in the archived training drivers, the tooth
+            # encoder keeps its backbone in `l3_encoder.bb`, so 'l3_encoder.features' matches no
+            # parameter; this is kept identical to the reported runs.
+            for n, p in model.named_parameters():
+                if any(x in n for x in ['l1_encoder.features', 'l3_encoder.features']):
+                    p.requires_grad = False
+        elif ep == a.phase1_epochs:
+            for n, p in model.named_parameters():
+                p.requires_grad = True
             for g in opt.param_groups:
                 g['lr'] = a.lr2
         model.train()

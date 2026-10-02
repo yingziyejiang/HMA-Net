@@ -36,6 +36,10 @@ augmentation (jitter 0.10, shift 0.10, rotation 5 degrees, feature dropout 0.1, 
 curriculum ramp); Adam, 15 frozen-backbone epochs at lr 1e-3 then full fine-tuning at lr 1e-4 halved every
 20 epochs; batch size 12; 100 epochs.
 
+## Evaluate
+
+python evaluate.py --manifest manifest.csv --checkpoint runs/hma_net/best_age.pt --split test
+
 ## Train
 
     python train.py --manifest manifest.csv --outdir runs/hma_net
