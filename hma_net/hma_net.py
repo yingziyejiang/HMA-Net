@@ -42,7 +42,7 @@ class DentalAgeDataset(Dataset):
     def _load_img(self, path):
         img = cv2.imread(path)
         if img is None:
-            return np.zeros((self.img_size, self.img_size, 3), dtype=np.float32), (1, 1)
+            return np.zeros((3, self.img_size, self.img_size), dtype=np.float32), (1, 1)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         h, w = img.shape[:2]
         img = cv2.resize(img, (self.img_size, self.img_size))
@@ -121,7 +121,7 @@ class DentalAgeDataset(Dataset):
                                   flags=cv2.INTER_LINEAR,
                                   borderMode=cv2.BORDER_CONSTANT, borderValue=(0, 0, 0))
         except:
-            return np.zeros((self.tooth_size, self.tooth_size, 3), dtype=np.float32)
+            return np.zeros((3, self.tooth_size, self.tooth_size), dtype=np.float32)
         crop = cv2.resize(crop, (self.tooth_size, self.tooth_size))
 
         if self.training and self.color_jitter:
@@ -427,6 +427,8 @@ def evaluate(model, loader, device):
             all_ages.append(batch['age'].cpu().numpy())
             all_genders.append(batch['gender'].cpu().numpy())
             all_gender_preds.append(torch.sigmoid(gender_logit).cpu().numpy())
+    if not all_preds:
+        raise ValueError('empty split: the loader produced no batches')
     preds = np.concatenate(all_preds).flatten()
     ages = np.concatenate(all_ages).flatten()
     genders = np.concatenate(all_genders).flatten()
@@ -443,14 +445,8 @@ def evaluate(model, loader, device):
             'preds': preds.tolist(), 'ages': ages.tolist(),
             'gender_preds': gender_preds.tolist(), 'genders': genders.tolist()}
 
-def set_trainable(model, patterns, trainable=True):
-    for name, param in model.named_parameters():
-        if any(p in name for p in patterns):
-            param.requires_grad = trainable
-
-def compute_loss(model, batch, loss_type='fixed_weight',
-                    use_focal=True, focal_gamma=2.0, focal_alpha=0.5,
-                    gender_weight=3.0, coral_weight=0.5):
+def compute_loss(model, batch, use_focal=True, focal_gamma=2.0, focal_alpha=0.5,
+                 gender_weight=3.0, coral_weight=0.5):
     age_pred, gender_logit, coral_logits = model(batch)
 
     age_mse = F.mse_loss(age_pred, batch['age'])

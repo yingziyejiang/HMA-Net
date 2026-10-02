@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hma_net'))
 from hma_net import (BalancedBatchSampler, DentalAgeDataset, HMAAgePredictor,
-                     compute_loss, evaluate, set_trainable)
+                     compute_loss, evaluate)
 
 
 def parse_args():
