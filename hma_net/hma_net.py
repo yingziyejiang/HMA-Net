@@ -343,7 +343,6 @@ class HMAAgePredictor(nn.Module):
         pos_bbox = batch['pos_bbox']
         fdi = batch['fdi']
         mask = batch['mask']
-        gender = batch['gender'].squeeze(-1)
         B, N = teeth.shape[:2]
 
         l1_feat = self.l1_encoder(img)
