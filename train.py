@@ -70,7 +70,8 @@ def main():
         running = 0.0
         for step, batch in enumerate(train_ld):
             batch = {k: (v.to(a.device) if torch.is_tensor(v) else v) for k, v in batch.items()}
-            loss, _ = compute_loss(model, batch, gender_weight=a.gender_weight, coral_weight=a.coral_weight)
+            loss = compute_loss(model, batch, gender_weight=a.gender_weight,
+                                coral_weight=a.coral_weight)[0]
             opt.zero_grad()
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
@@ -95,7 +96,8 @@ def main():
             break
     ck = torch.load(os.path.join(a.outdir, 'best_age.pt'), map_location=a.device)
     model.load_state_dict(ck['model_state_dict'])
-    print('test:', evaluate(model, test_ld, a.device), flush=True)
+    t = evaluate(model, test_ld, a.device)
+    print('test: ' + json.dumps({k: round(v, 4) for k, v in t.items() if isinstance(v, float)}), flush=True)
     json.dump({'best_val_age_mae': best['age'], 'best_val_sex_acc': best['sex']},
               open(os.path.join(a.outdir, 'summary.json'), 'w'), indent=2)
 

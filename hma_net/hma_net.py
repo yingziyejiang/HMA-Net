@@ -1,9 +1,12 @@
 
 
-import os, sys, json, torch, torch.nn as nn, torch.nn.functional as F
-import numpy as np, pandas as pd, cv2
-from torch.utils.data import DataLoader, Dataset
-from datetime import datetime
+import os
+import cv2
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import Dataset
 import torchvision.models as models
 
 ROOT = os.environ.get("HMA_DATA_ROOT", ".")
@@ -470,9 +473,23 @@ class BalancedBatchSampler(torch.utils.data.Sampler):
         df = dataset.df
         self.male_idx = df[df['gender'] == 1].index.tolist()
         self.female_idx = df[df['gender'] == 0].index.tolist()
-        self.n_batches = (len(self.male_idx) + len(self.female_idx)) // batch_size
+        self.all_idx = df.index.tolist()
+        self.balanced = bool(self.male_idx) and bool(self.female_idx)
+        if self.balanced:
+            self.n_batches = (len(self.male_idx) + len(self.female_idx)) // batch_size
+        else:
+            self.n_batches = max(1, len(self.all_idx) // batch_size)
 
     def __iter__(self):
+        if not self.balanced:
+            # A split with a single sex (or an empty one) cannot be balanced; fall back to plain
+            # shuffled batches so smoke-test manifests still train instead of crashing.
+            idx = self.all_idx.copy()
+            for b in range(self.n_batches):
+                if self.shuffle:
+                    np.random.shuffle(idx)
+                yield idx[b * self.batch_size:(b + 1) * self.batch_size]
+            return
         half = self.batch_size // 2
         male_pool = self.male_idx.copy()
         female_pool = self.female_idx.copy()
