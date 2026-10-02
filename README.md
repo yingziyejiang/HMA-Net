@@ -3,12 +3,16 @@
 Companion release for the manuscript *Removing Redundant Anatomical Inputs Improves Deep Learning-Based
 anatomical inputs in dental age and sex estimation*.
 
+## Scope of this release
+
+Code and configuration of HMA-Net, together with the trained tooth-detector weights and a small
+de-identified sample. Other analysis scripts used in the study are not part of this release.
+
 ## Contents
 
     train.py                  training entry point (two-phase fine-tuning)
     hma_net/hma_net.py        model, losses, dataset and evaluation (self-contained)
     config/parameters.json    parameters of the reported configuration
-    figures/                  scripts for the Grad-CAM panels
     data_sample/              three de-identified sample cases and the label format
     weights/                  tooth-detector weights (see weights/LICENSE)
 
@@ -65,10 +69,6 @@ weights/LICENSE).
     m = YOLO("weights/tooth_detector_yolov8m_obb.pt")
     res = m(image_path, conf=0.25, iou=0.7, max_det=300, imgsz=1024)[0]
 
-## Grad-CAM
-
-    python figures/gradcam_l1_panoramic.py --checkpoint <ckpt> --image <opg.jpg> --rois <labels> --stream both
-    python figures/gradcam_l3_per_tooth_globalnorm.py --checkpoint <ckpt> --image <opg.jpg> --rois <labels> --fdi 46,36 --stream l3 --target sex
 
 ## Citation
 
