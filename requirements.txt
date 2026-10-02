@@ -3,5 +3,5 @@ torchvision
 numpy
 pandas
 opencv-python
-scikit-learn
-tqdm
+# optional, only for running the tooth detector in README (Ultralytics):
+# ultralytics==8.4.10

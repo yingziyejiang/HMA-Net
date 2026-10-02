@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this code or the trained weights, please cite the manuscript below."
-title: "HMA-Net: code, parameters and weights for incremental information auditing of anatomical inputs in dental age and sex estimation"
+title: "HMA-Net: code and parameters for the reported 512-pixel FiLM configuration (L1 panoramic + L3 per-tooth streams)"
 type: software
 authors:
   - family-names: Wu
@@ -19,13 +19,13 @@ authors:
     given-names: Weijie
   - family-names: Xia
     given-names: Yue
-version: "1.0"
-date-released: "2026-09-15"
+version: "1.1"
+date-released: "2026-10-02"
 license: MIT
 repository-code: "https://github.com/yingziyejiang/HMA-Net"
 preferred-citation:
   type: article
-  title: "Incremental information auditing reveals non-incremental anatomical inputs in dental age and sex estimation"
+  title: "Removing Redundant Anatomical Inputs Improves Deep Learning-Based Forensic Dental Age and Sex Estimation"
   authors:
     - family-names: Wu
       given-names: Zongze

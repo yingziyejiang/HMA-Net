@@ -1,7 +1,7 @@
 # HMA-Net — final model code and parameters
 
 Companion release for the manuscript *Removing Redundant Anatomical Inputs Improves Deep Learning-Based
-anatomical inputs in dental age and sex estimation*.
+Forensic Dental Age and Sex Estimation*.
 
 ## Scope of this release
 
