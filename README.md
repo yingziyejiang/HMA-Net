@@ -30,8 +30,13 @@ de-identified sample. Other analysis scripts used in the study are not part of t
 
 The model takes one batch dict with keys img (B,3,512,512), teeth (B,32,3,64,64), pos_bbox (B,32,4),
 fdi (B,32) and mask (B,32). It returns (age_pred, gender_logit, coral_logits); the sex probability is
-sigmoid(gender_logit). Both outputs come from the panoramic image alone: sex is read out first and the
+sigmoid(gender_logit). Both outputs are predicted jointly from the panoramic image alone: sex is read out first and the
 age head is conditioned on that predicted sex, so no sex label is needed at inference.
+
+For exact reproduction of the reported training runs, construct the model with
+`HMAAgePredictor(..., sex_conditioning='label')`, which feeds the true label in the batch key
+`gender` into the age head as during training. The default `sex_conditioning='predicted'` is the
+deployment setting.
 
 ## Reported configuration
 

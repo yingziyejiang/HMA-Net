@@ -272,11 +272,13 @@ class SpatialGAT(nn.Module):
 
 class HMAAgePredictor(nn.Module):
     def __init__(self, embed_dim=256, num_age_bins=16, use_coral=True,
-                 l1_backbone='resnet50', l3_backbone='resnet34', img_size=512):
+                 l1_backbone='resnet50', l3_backbone='resnet34', img_size=512,
+                 sex_conditioning='predicted'):
         super().__init__()
         self.use_coral = use_coral
         self.embed_dim = embed_dim
         self.use_gender_l1 = True
+        self.sex_conditioning = sex_conditioning   # 'predicted' (joint, image only) or 'label'
         self.use_task_decoupled = True
 
         self.l1_encoder = GlobalEncoder(embed_dim, backbone_type=l1_backbone, img_size=img_size)
@@ -384,11 +386,18 @@ class HMAAgePredictor(nn.Module):
             gender_input = gender_feat
         gender_logit = self.gender_head(gender_input)
 
-        # Joint estimation: the sex probability is read from the image features first, and the age
-        # head is conditioned on that prediction rather than on the true sex label, so both outputs
-        # come from the panoramic image alone. The "gender" key of the batch is not used at inference.
-        pred_sex = (torch.sigmoid(gender_logit).view(-1) > 0.5).long()
-        gen_emb = self.gender_embed(pred_sex)
+        # Joint estimation of age and sex from the same features. The age head receives an embedding
+        # of the sex indicator: with sex_conditioning='predicted' (default) it is the sex decision read
+        # from the image above, so the panoramic image alone drives both outputs; with
+        # sex_conditioning='label' it is the true label in batch['gender'], which reproduces the
+        # training protocol of the reported runs and is not available at deployment.
+        if self.sex_conditioning == 'label':
+            if 'gender' not in batch:
+                raise KeyError("sex_conditioning='label' requires batch['gender']")
+            sex_index = batch['gender'].view(-1).long()
+        else:
+            sex_index = (torch.sigmoid(gender_logit).view(-1) > 0.5).long()
+        gen_emb = self.gender_embed(sex_index)
         age_input = torch.cat([age_feat, gen_emb], dim=-1)
         age_pred = self.age_head(age_input)
 
