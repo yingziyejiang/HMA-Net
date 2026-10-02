@@ -33,10 +33,6 @@ fdi (B,32) and mask (B,32). It returns (age_pred, gender_logit, coral_logits); t
 sigmoid(gender_logit). Both outputs are predicted jointly from the panoramic image alone: sex is read out first and the
 age head is conditioned on that predicted sex, so no sex label is needed at inference.
 
-For exact reproduction of the reported training runs, construct the model with
-`HMAAgePredictor(..., sex_conditioning='label')`, which feeds the true label in the batch key
-`gender` into the age head as during training. The default `sex_conditioning='predicted'` is the
-deployment setting.
 
 ## Reported configuration
 
