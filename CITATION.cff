@@ -1,10 +1,12 @@
 cff-version: 1.2.0
-message: "If you use this code or the trained weights, please cite the manuscript below."
+message: "If you use this code or these parameters, please cite the manuscript below."
 title: "HMA-Net: code and parameters for the reported 512-pixel FiLM configuration (L1 panoramic + L3 per-tooth streams)"
 type: software
 authors:
   - family-names: Wu
     given-names: Zongze
+  - family-names: Shan
+    given-names: Weijie
   - family-names: Zhang
     given-names: Wujun
   - family-names: Kang
@@ -15,10 +17,10 @@ authors:
     given-names: Zibin
   - family-names: Huang
     given-names: Zehang
-  - family-names: Shan
-    given-names: Weijie
-  - family-names: Xia
-    given-names: Yue
+  - family-names: Zhang
+    given-names: Yan
+  - family-names: Yue
+    given-names: Xia
 version: "1.1"
 date-released: "2026-10-02"
 license: MIT
@@ -29,6 +31,8 @@ preferred-citation:
   authors:
     - family-names: Wu
       given-names: Zongze
+    - family-names: Shan
+      given-names: Weijie
     - family-names: Zhang
       given-names: Wujun
     - family-names: Kang
@@ -39,10 +43,10 @@ preferred-citation:
       given-names: Zibin
     - family-names: Huang
       given-names: Zehang
-    - family-names: Shan
-      given-names: Weijie
-    - family-names: Xia
-      given-names: Yue
+    - family-names: Zhang
+      given-names: Yan
+    - family-names: Yue
+      given-names: Xia
   year: 2026
   journal: TBD
   doi: TBD
