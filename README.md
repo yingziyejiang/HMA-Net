@@ -1,6 +1,6 @@
 # HMA-Net — final model code and parameters
 
-Companion release for the manuscript *Incremental information auditing reveals non-incremental
+Companion release for the manuscript *Removing Redundant Anatomical Inputs Improves Deep Learning-Based
 anatomical inputs in dental age and sex estimation*.
 
 ## Contents
@@ -28,6 +28,14 @@ The model expects one batch dict: img (B,3,512,512), teeth (B,32,3,64,64), pos_b
 fdi (B,32), mask (B,32). It returns (age_pred, gender_logit, coral_logits); the sex probability
 is sigmoid(gender_logit).
 
+## Reported configuration
+
+512 x 512 panoramic input; L1 panoramic + L3 per-tooth streams (L2 disabled); FiLM fusion (task-decoupled);
+GAT aggregation over the tooth graph (4 heads, 2 layers, k = 4 spatial nearest neighbours); fixed-mid
+augmentation (jitter 0.10, shift 0.10, rotation 5 degrees, feature dropout 0.1, tooth dropout 0.1, no
+curriculum ramp); Adam, 15 frozen-backbone epochs at lr 1e-3 then full fine-tuning at lr 1e-4 halved every
+20 epochs; batch size 12; 100 epochs.
+
 ## Train
 
     python train.py --manifest manifest.csv --outdir runs/hma_net
@@ -35,7 +43,7 @@ is sigmoid(gender_logit).
 The manifest CSV needs the columns img_path, label_path, age, gender, split, with per-tooth label
 files in the format described in data_sample/README.md. Protocol of the reported run: Adam, 15
 frozen-backbone epochs at lr 1e-3 then full fine-tuning at lr 1e-4 with the learning rate halved
-every 20 epochs, batch size 32 with a gender-balanced sampler, 100 epochs, best validation score
+every 20 epochs, batch size 12 with a gender-balanced sampler, 100 epochs, best validation score
 per head.
 
 ## Data

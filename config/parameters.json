@@ -51,7 +51,7 @@
     "jitter": 0.1,
     "rotation_deg": 5,
     "feature_dropout": 0.1,
-    "tooth_dropout": 0.2,
+    "tooth_dropout": 0.1,
     "colour_jitter": true,
     "tooth_context_margin": 0.6,
     "protocol": "fixed-mid (parameters held constant, no curriculum ramp)"

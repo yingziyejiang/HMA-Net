@@ -18,7 +18,7 @@ def parse_args():
     p.add_argument('--outdir', default='runs/hma_net')
     p.add_argument('--epochs', type=int, default=100)
     p.add_argument('--phase1-epochs', type=int, default=15)
-    p.add_argument('--batch-size', type=int, default=32)
+    p.add_argument('--batch-size', type=int, default=12, help='reported 512 dual-stream batch size; use 32 for 256 px runs')
     p.add_argument('--img-size', type=int, default=512, help='panoramic input resolution (paper: 512)')
     p.add_argument('--lr1', type=float, default=1e-3)
     p.add_argument('--lr2', type=float, default=1e-4)

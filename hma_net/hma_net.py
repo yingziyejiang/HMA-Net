@@ -15,8 +15,8 @@ def _build_backbone(name):
     return nn.Sequential(*list(bb.children())[:-1]), LIGHT_FEAT_DIMS[name]
 
 class DentalAgeDataset(Dataset):
-    def __init__(self, df, img_size=512, tooth_size=64, max_teeth=52, training=False,
-                 jitter_scale=0.12, jitter_shift=0.15, jitter_angle=12.0, tooth_dropout=0.2, color_jitter=True,
+    def __init__(self, df, img_size=512, tooth_size=64, max_teeth=32, training=False,
+                 jitter_scale=0.10, jitter_shift=0.10, jitter_angle=5.0, tooth_dropout=0.1, color_jitter=True,
                  context_margin=0.6):
         self.df = df.reset_index(drop=True)
         self.img_size = img_size
